@@ -1,6 +1,6 @@
 # Work with Python 3.6
 import discord
-
+from discord.ext import commands
 
 # will get this in a object form
 
@@ -9,16 +9,41 @@ f = open("token.txt", "r")
 
 TOKEN = f.read()
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='!')
 
 
-@client.event
-async def on_message(message):
-    # we do not want the bot to reply to itself
-    if message.author == client.user:
-        return
+@bot.command()
+async def role(ctx, role=None, personne=None):
 
-    if message.content.startswith('!help'):
+    if role is None:
+
+        msg = '{0.author.mention} please state a role.'.format(ctx)
+        await ctx.send(msg)
+
+    else:
+        role_exist = False
+
+        for f in ctx.guild.roles:
+            if role == f:
+                role_exist = True
+
+        if role_exist is False:
+
+            msg = '{0.author.mention} the role you mentionned doesn\'t exist. Please try again'.format(ctx)
+            await ctx.send(msg)
+        else:
+            if personne is None:
+                await ctx.author.add_roles(role)
+                msg = 'The role : "{0}" has been accorded to {1}'.format(role, ctx.author)
+                await ctx.send(msg)
+            else:
+                await personne.add_roles(role)
+                msg = 'The role : "{0}" has been accorded to {1}'.format(role, personne)
+                await ctx.send(msg)
+
+
+
+    """if message.content.startswith('!help'):
         msg = 'Hello, i am currently in development, but i will be ready sooner or later (probably later)' \
               ' i will be back to you {0.author.mention}'.format(message)
         await message.author.send(msg)
@@ -45,7 +70,7 @@ async def on_message(message):
                 msg = '{0} messages has been deleted {1.author.mention}'.format(value, message)
 
                 await message.channel.send(msg)
-
+"""
     """if message.content.startswith("!react"):
 
         breaking = message.content.split(" ")
@@ -59,13 +84,14 @@ async def on_message(message):
         await message.channel.send(msg.reaction)"""
 
 
-
-@client.event
+@bot.event
 async def on_ready():
 
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening,
-                                                           name="\"!help\" pour savoir utiliser le bot"))
+    print(f'\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n')
 
-    print('Logged in as ' + client.user.name)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening,
+                                                        name="\"!help\" pour savoir utiliser le bot"))
 
-client.run(TOKEN)
+    print('Successfully running')
+
+bot.run(TOKEN)
