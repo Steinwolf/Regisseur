@@ -1,5 +1,10 @@
 # Work with Python 3.6
 import discord
+
+
+# will get this in a object form
+
+
 f = open("token.txt", "r")
 
 TOKEN = f.read()
