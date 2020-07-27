@@ -39,7 +39,7 @@ async def on_message(message):
 
                 await message.channel.send(msg)
 
-    /*if message.content.startswith("!react"):
+    """if message.content.startswith("!react"):
 
         breaking = message.content.split(" ")
 
@@ -49,7 +49,7 @@ async def on_message(message):
 
         await msg.add_reaction(e)
 
-        await message.channel.send(msg.reaction)*/
+        await message.channel.send(msg.reaction)"""
 
 
 
