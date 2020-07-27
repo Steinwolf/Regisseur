@@ -1,9 +1,11 @@
 # Work with Python 3.6
 import discord
+f = open("token.txt", "r")
 
-TOKEN = 'NzM1NjIyNTk2MjE3MDEyMjY0.XxlcaQ.g9Ks01TROXUCYHeJVUuA8qvwOoI'
+TOKEN = f.read()
 
 client = discord.Client()
+
 
 @client.event
 async def on_message(message):
