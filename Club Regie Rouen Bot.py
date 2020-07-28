@@ -2,14 +2,16 @@
 import discord
 from discord.ext import commands
 
+# Read the token --- made to hide the token in Github --- Hi Git-user 😀
 f = open("token.txt", "r")
-
 TOKEN = f.read()
 
+# initiate bot information
 bot = commands.Bot(command_prefix='!', description='A bot to manage the "Club regie Rouen" discord guild')
 bot.remove_command('help')
 
 
+# Begin define bot command
 @bot.command()
 async def clear(ctx, value=None):
 
@@ -17,6 +19,7 @@ async def clear(ctx, value=None):
     author = ctx.author
     message_history = ctx.history
 
+    # Define display message and value depending of argument
     if value is None:
         msg = 'You did not specify how many message you wanted to delete {0}.'.format(author.mention)
         channel.send(msg)
@@ -29,6 +32,7 @@ async def clear(ctx, value=None):
         msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
         value = int(value) + 1
 
+    # Delete messages
     async with ctx.channel.typing():
         async for m in message_history(limit=int(value) + 1):
             await m.delete()
@@ -40,6 +44,7 @@ async def react(ctx, emote):
 
     channel = ctx.channel
 
+    # / Need upgrade / and comment tho
     msg = await channel.send("message")
     await msg.add_reaction(emote)
 
@@ -52,12 +57,12 @@ async def role(ctx):
     author = ctx.author
     role_name = discord.utils.get(guild.roles, name="Bot testing")
 
+    # Give specific role to user / Need upgrade
     await author.add_roles(role_name)
     msg = 'The role {0} was added to {1}'.format(role_name.mention, author.mention)
     await channel.send(msg)
 
 
-#Embeded help with list and details of commands
 @bot.command(pass_context=True)
 async def help(ctx):
 
@@ -66,14 +71,19 @@ async def help(ctx):
         colour=discord.Colour.green()
     )
 
+    # Create embedded message
     embedded_message.set_author(name='Help : list of commands available')
     embedded_message.add_field(name='clear', value='Delete message. Take a positive int as argument', inline=False)
     embedded_message.add_field(name='react', value='Test to get a reaection. Take a emote as argument', inline=False)
-    embedded_message.add_field(name='role', value='Give the role "Bot Testing toembedded_messagethe author', inline=False)
+    embedded_message.add_field(name='role', value='Give the role "Bot Testing to the author', inline=False)
 
+    # Send embedded message
     await author.send(embed=embedded_message)
 
 
+# End define bot command
+
+# Begin define bot event
 @bot.event
 async def on_ready():
 
@@ -83,6 +93,7 @@ async def on_ready():
     activity = '"!help" pour savoir utiliser le bot"'
     msg = '\nLogged in as: {0} - {1}\nVersion: {2}\n'.format(bot_name, bot_id, package_version)
 
+    # print bot info and change activity
     print(msg)
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=activity))
     print('Successfully running')
@@ -91,9 +102,15 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
 
-    msg = 'You have misstype the command or the argument, if the problem persist,' \
-          ' contact an admin with the error code {0}'.format(error)
+    author = ctx.author
+    msg = 'You have misstype the command or the argument {0}\n' \
+          'if the problem persist, contact an admin with the error code {1}'.format(error, author)
 
+    # Send error message to user
     await ctx.send(msg)
 
+
+# End define bot event
+
+# Start bot
 bot.run(TOKEN)
