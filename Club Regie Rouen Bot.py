@@ -1,6 +1,8 @@
 # v0.3
 import discord
 from discord.ext import commands
+import asyncio
+import logging
 
 # Read the token --- made to hide the token in Github --- Hi Git-user 😀
 f = open("token.txt", "r")
@@ -136,6 +138,18 @@ async def on_command_error(ctx, error):
     await channel.send('error')
     await author.send(msg)
 
+#Public Welcome
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(735801671954858054) # channel bottesting
+    await member.send("Bienvenue dans le club régie !")
+    await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
+
+#Mod Leave Announcement
+@bot.event
+async def on_member_remove(member):
+    channel = bot.get_channel(735801671954858054) # channel bottesting
+    await channel.send('**' + member.mention + '** viens de quitter le serveur du club Régie.')
 
 # End define bot event
 
