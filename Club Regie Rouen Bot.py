@@ -13,18 +13,14 @@ bot.remove_command('help')
 
 # Begin define bot command
 @bot.command()
-async def clear(ctx, value=None):
+async def clear(ctx, value):
 
     channel = ctx.channel
     author = ctx.author
     message_history = ctx.history
 
     # Define display message and value depending of argument
-    if value is None:
-        msg = 'You did not specify how many message you wanted to delete {0}.'.format(author.mention)
-        channel.send(msg)
-
-    elif value == "all":
+    if value == "all":
         msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
         value = 10000
 
@@ -75,22 +71,40 @@ async def role(ctx, role_given, person_given=None):
 
 
 @bot.command(pass_context=True)
-async def help(ctx):
+async def help(ctx, command=None):
 
     author = ctx.author
     embedded_message = discord.Embed(
         colour=discord.Colour.green()
     )
 
-    # Create embedded message
-    embedded_message.set_author(name='Help : list of commands available')
-    embedded_message.add_field(name='clear', value='Delete message. Take a positive int as argument', inline=False)
-    embedded_message.add_field(name='react', value='Test to get a reaection. Take a emote as argument', inline=False)
-    embedded_message.add_field(name='role', value='Give the role "Bot Testing to the author', inline=False)
+    if command is None:
 
-    # Send embedded message
-    await author.send(embed=embedded_message)
+        # Create embedded message
+        embedded_message.set_author(name='help : list of commands available')
+        embedded_message.add_field(name='clear', value='Delete message. Take a positive int as argument', inline=False)
+        embedded_message.add_field(name='react', value='Test to get a reaction. Take a emote as argument', inline=False)
+        embedded_message.add_field(name='role', value='Give the role "Bot Testing to the author', inline=False)
 
+        # Send embedded message
+        await author.send(embed=embedded_message)
+    else:
+        instruction = {
+            "help": 'Type "!help" to display the available command.Type "!help [command]" to have more information',
+            "clear": 'Type "!clear [int]" to delete a /int\\ number of message',
+            "react": 'This command is in progress, please wait',
+            "role": 'Type "!role [role tag] [user tag]" to grant a user a specific role.'
+                    'You must have managing permission'
+        }
+        msg = instruction[command].split('.')
+
+        # Create embedded message
+        embedded_message.set_author(name='help : {0}'.format(command))
+        for i in range(len(msg)):
+            embedded_message.add_field(name=str(i+1), value=msg[i], inline=False)
+
+        # Send embedded message
+        await author.send(embed=embedded_message)
 
 # End define bot command
 
