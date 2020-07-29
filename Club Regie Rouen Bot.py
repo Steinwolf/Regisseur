@@ -43,7 +43,7 @@ async def clear(ctx, value=None, *, end=None):
 
         # Delete messages
         async with ctx.channel.typing():
-            async for m in message_history(limit=int(value) + 1):
+            async for m in message_history(limit=int(value)):
                 await m.delete()
             await channel.send(msg)
 
