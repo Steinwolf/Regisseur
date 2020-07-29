@@ -13,39 +13,30 @@ bot.remove_command('help')
 
 # Begin define bot command
 @bot.command()
-async def clear(ctx, value=None, *, end=None):
+async def clear(ctx, value=None):
 
     channel = ctx.channel
     author = ctx.author
+    message_history = ctx.history
 
-    if end is not None and end[-1] == '?':
-        msg = '!clear(value), value argument must be an positive int'
-        await author.send(msg)
-    elif value == '?':
-        msg = '!clear(value), value argument must be an positive int'
-        await author.send(msg)
+    # Define display message and value depending of argument
+    if value is None:
+        msg = 'You did not specify how many message you wanted to delete {0}.'.format(author.mention)
+        channel.send(msg)
+
+    elif value == "all":
+        msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
+        value = 10000
+
     else:
+        msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
+        value = int(value) + 1
 
-        message_history = ctx.history
-
-        # Define display message and value depending of argument
-        if value is None:
-            msg = 'You did not specify how many message you wanted to delete {0}.'.format(author.mention)
-            channel.send(msg)
-
-        elif value == "all":
-            msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
-            value = 10000
-
-        else:
-            msg = '{0} messages has been deleted by {1}'.format(value, author.mention)
-            value = int(value) + 1
-
-        # Delete messages
-        async with ctx.channel.typing():
-            async for m in message_history(limit=int(value)):
-                await m.delete()
-            await channel.send(msg)
+    # Delete messages
+    async with ctx.channel.typing():
+        async for m in message_history(limit=int(value)):
+            await m.delete()
+        await channel.send(msg)
 
 
 @bot.command()
