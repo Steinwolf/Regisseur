@@ -68,10 +68,8 @@ async def role(ctx, role_given, person_given=None):
     # Begin parsing argument
     if person_given is None:
         person_name = author
-    elif person_given[0] == '<':
-        person_name = discord.utils.get(guild.members, mention=person_given)
     else:
-        person_name = discord.utils.get(guild.members, name=person_given)
+        person_name = discord.utils.get(guild.members, mention=person_given)
 
     if role_given[0] == '<':
         role_name = discord.utils.get(guild.roles, mention=role_given)
@@ -126,8 +124,8 @@ async def on_command_error(ctx, error):
 
     channel = ctx.channel
     author = ctx.author
-    msg = 'You have misstype the command or the argument ""{0}"", try to use "!help"\n' \
-          'if the problem persist, contact an admin with the error code {1}'.format(error, author.mention)
+    msg = 'You have misstype the command or the argument, try to use "!help"\n' \
+          'if the problem persist, contact an admin with the error code ""{0}"" {1}'.format(error, author.mention)
 
     # Send error message to user
     await channel.send('error')
