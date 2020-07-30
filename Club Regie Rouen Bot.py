@@ -1,31 +1,7 @@
 # v0.3
 import discord
 from discord.ext import commands
-import asyncio
-import logging
-
-# Read the token --- made to hide the token in Github --- Hi Git-user 😀
-f = open("config/token.txt", "r")
-TOKEN = f.read()
-f.close()
-
-# Read file permission
-f = open('config/command_permission.txt', 'r', encoding='utf-8 ')
-permission_file = f.readlines()
-f.close()
-
-# Read file help
-f = open('config/help.txt', 'r', encoding='utf-8')
-help_file = f.read()
-f.close()
-
-permission = {}
-
-for l in permission_file:
-    if l.endswith('\\n'):
-        l = l[0:-2]
-    l = l.split('.')
-    permission.update({l[0]: l[1]})
+from dontknowhowtonameit import file_reader as fr
 
 # initiate bot information
 bot = commands.Bot(command_prefix='!', description='A bot to manage the "Club regie Rouen" discord guild')
@@ -131,6 +107,7 @@ async def help(ctx, command=None):
 
 # End define bot command
 
+
 # Begin define bot event
 @bot.event
 async def on_ready():
@@ -160,7 +137,7 @@ async def on_command_error(ctx, error):
     await author.send(msg)
 
 
-#Public Welcome
+# Public Welcome
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(735801671954858054) # channel bottesting
@@ -168,7 +145,7 @@ async def on_member_join(member):
     await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
 
 
-#Mod Leave Announcement
+# Mod Leave Announcement
 @bot.event
 async def on_member_remove(member):
     channel = bot.get_channel(735801671954858054) # channel bottesting
@@ -186,11 +163,11 @@ async def on_raw_reaction_add(p):
 async def on_raw_reaction_remove(p):
 
     guild = bot.get_guild(p.guild_id)
-    memeber = guild.get_member(p.user_id)
+    member = guild.get_member(p.user_id)
 
     if p.message_id == 738179495118241798:
         msg = 'Why the fuck did you REMOVED IT ???'
-        await memeber.send(msg)
+        await member.send(msg)
 
 
 @bot.event
@@ -202,4 +179,4 @@ async def on_message(message):
 # End define bot event
 
 # Start bot
-bot.run(TOKEN)
+bot.run(fr.TOKEN)
