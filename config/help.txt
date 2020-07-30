@@ -1,0 +1,4 @@
+help.Type "!help" to display the available command?Type "!help [command]" to have more information
+clear.Type "!clear [int]" to delete a /int\\ number of message
+react.This command is in progress, please wait
+role.Type "!role [role tag] [user tag]" to grant a user a specific role?You must have managing permission

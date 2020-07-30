@@ -88,14 +88,8 @@ async def help(ctx, command=None):
         # Send embedded message
         await author.send(embed=embedded_message)
     else:
-        instruction = {
-            "help": 'Type "!help" to display the available command.Type "!help [command]" to have more information',
-            "clear": 'Type "!clear [int]" to delete a /int\\ number of message',
-            "react": 'This command is in progress, please wait',
-            "role": 'Type "!role [role tag] [user tag]" to grant a user a specific role.'
-                    'You must have managing permission'
-        }
-        msg = instruction[command].split('.')
+
+        msg = fr.helper[command].split('?')
 
         # Create embedded message
         embedded_message.set_author(name='help : {0}'.format(command))
@@ -140,7 +134,8 @@ async def on_command_error(ctx, error):
 # Public Welcome
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(735801671954858054) # channel bottesting
+    # channel bottesting
+    channel = bot.get_channel(735801671954858054)
     await member.send("Bienvenue dans le club régie !")
     await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
 
@@ -148,7 +143,8 @@ async def on_member_join(member):
 # Mod Leave Announcement
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(735801671954858054) # channel bottesting
+    # channel bottesting
+    channel = bot.get_channel(735801671954858054)
     await channel.send('**' + member.mention + '** viens de quitter le serveur du club Régie.')
 
 
@@ -168,12 +164,6 @@ async def on_raw_reaction_remove(p):
     if p.message_id == 738179495118241798:
         msg = 'Why the fuck did you REMOVED IT ???'
         await member.send(msg)
-
-
-@bot.event
-async def on_message(message):
-    msg = '{0} has written "{1}" in {2} channel'.format(message.author, message.content, message.channel)
-    print(msg)
 
 
 # End define bot event

@@ -10,7 +10,7 @@ f.close()
 
 # Read file help
 f = open('config/help.txt', 'r', encoding='utf-8')
-help_file = f.read()
+help_file = f.readlines()
 f.close()
 
 permission = {}
@@ -20,3 +20,13 @@ for l in permission_file:
         l = l[0:-2]
     l = l.split('.')
     permission.update({l[0]: l[1]})
+
+
+helper = {}
+
+for l in help_file:
+    if l.endswith('\\n'):
+        l = l[0:-2]
+    l = l.split('.')
+    helper.update({l[0]: l[1]})
+
