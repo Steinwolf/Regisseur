@@ -5,22 +5,27 @@ import asyncio
 import logging
 
 # Read the token --- made to hide the token in Github --- Hi Git-user 😀
-f = open("token.txt", "r")
+f = open("config/token.txt", "r")
 TOKEN = f.read()
 f.close()
 
 # Read file permission
-f = open('command_permission.txt', 'r', encoding='utf-8 ')
-FILE = f.readlines()
+f = open('config/command_permission.txt', 'r', encoding='utf-8 ')
+permission_file = f.readlines()
 f.close()
 
-perm = {}
+# Read file help
+f = open('config/help.txt', 'r', encoding='utf-8')
+help_file = f.read()
+f.close()
 
-for file in FILE:
-    fil = file.split(".")
-    perm.update({fil[0]: fil[1]})
+permission = {}
 
-print(perm)
+for l in permission_file:
+    if l.endswith('\\n'):
+        l = l[0:-2]
+    l = l.split('.')
+    permission.update({l[0]: l[1]})
 
 # initiate bot information
 bot = commands.Bot(command_prefix='!', description='A bot to manage the "Club regie Rouen" discord guild')
@@ -186,6 +191,13 @@ async def on_raw_reaction_remove(p):
     if p.message_id == 738179495118241798:
         msg = 'Why the fuck did you REMOVED IT ???'
         await memeber.send(msg)
+
+
+@bot.event
+async def on_message(message):
+    msg = '{0} has written "{1}" in {2} channel'.format(message.author, message.content, message.channel)
+    print(msg)
+
 
 # End define bot event
 
