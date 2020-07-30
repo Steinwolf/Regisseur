@@ -38,13 +38,15 @@ async def clear(ctx, value):
 
 
 @bot.command()
-async def react(ctx, emote):
+async def react(ctx):
 
-    channel = ctx.channel
-
-    # / Need upgrade / and comment tho
+    channel = bot.get_channel(738175849592913980)
     msg = await channel.send("message")
-    await msg.add_reaction(emote)
+
+    await msg.add_reaction('😀')
+    await msg.add_reaction('😃')
+    await msg.add_reaction('🙂')
+    await msg.add_reaction('😊')
 
 
 @bot.command()
@@ -138,6 +140,7 @@ async def on_command_error(ctx, error):
     await channel.send('error')
     await author.send(msg)
 
+
 #Public Welcome
 @bot.event
 async def on_member_join(member):
@@ -145,11 +148,30 @@ async def on_member_join(member):
     await member.send("Bienvenue dans le club régie !")
     await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
 
+
 #Mod Leave Announcement
 @bot.event
 async def on_member_remove(member):
     channel = bot.get_channel(735801671954858054) # channel bottesting
     await channel.send('**' + member.mention + '** viens de quitter le serveur du club Régie.')
+
+
+@bot.event
+async def on_raw_reaction_add(p):
+    if p.message_id == 738179495118241798:
+        msg = 'Why the fuck did you reacted with {0} beach (always kid friendly)'.format(p.emoji)
+        await p.member.send(msg)
+
+
+@bot.event
+async def on_raw_reaction_remove(p):
+
+    guild = bot.get_guild(p.guild_id)
+    memeber = guild.get_member(p.user_id)
+
+    if p.message_id == 738179495118241798:
+        msg = 'Why the fuck did you REMOVED IT ???'
+        await memeber.send(msg)
 
 # End define bot event
 
