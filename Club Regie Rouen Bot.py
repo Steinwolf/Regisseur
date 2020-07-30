@@ -7,6 +7,20 @@ import logging
 # Read the token --- made to hide the token in Github --- Hi Git-user 😀
 f = open("token.txt", "r")
 TOKEN = f.read()
+f.close()
+
+# Read file permission
+f = open('command_permission.txt', 'r', encoding='utf-8 ')
+FILE = f.readlines()
+f.close()
+
+perm = {}
+
+for file in FILE:
+    fil = file.split(".")
+    perm.update({fil[0]: fil[1]})
+
+print(perm)
 
 # initiate bot information
 bot = commands.Bot(command_prefix='!', description='A bot to manage the "Club regie Rouen" discord guild')
