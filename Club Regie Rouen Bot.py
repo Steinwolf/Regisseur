@@ -154,7 +154,7 @@ async def on_command_error(ctx, error):
 @bot.event
 async def on_member_join(member):
     # channel bottesting
-    channel = bot.get_channel(735801671954858054)
+    channel = bot.get_channel(739862361506185307)
     await member.send("Bienvenue dans le club régie !")
     await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
 
@@ -163,7 +163,7 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     # channel bottesting
-    channel = bot.get_channel(735801671954858054)
+    channel = bot.get_channel(739862361506185307)
     await channel.send('**' + member.mention + '** viens de quitter le serveur du club Régie.')
 
 
