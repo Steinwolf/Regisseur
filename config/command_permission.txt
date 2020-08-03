@@ -1,0 +1,4 @@
+clear.Membre gérant
+react.Membre gérant
+role.everyone
+help.everyone

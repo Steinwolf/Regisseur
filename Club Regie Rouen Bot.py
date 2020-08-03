@@ -1,12 +1,7 @@
 # v0.3
 import discord
 from discord.ext import commands
-import asyncio
-import logging
-
-# Read the token --- made to hide the token in Github --- Hi Git-user 😀
-f = open("token.txt", "r")
-TOKEN = f.read()
+from dontknowhowtonameit import file_reader as fr
 
 # initiate bot information
 bot = commands.Bot(command_prefix='!', description='A bot to manage the "Club regie Rouen" discord guild')
@@ -35,6 +30,25 @@ async def clear(ctx, value):
         async for m in message_history(limit=int(value)):
             await m.delete()
         await channel.send(msg)
+
+
+@bot.command()
+async def lockdown(ctx, channel_given=None):
+
+    guild = ctx.guild
+    if channel_given is None:
+        channel = ctx.channel
+    elif channel_given[0] == '<':
+        channel = discord.utils.get(guild.text_channels, mention=channel_given)
+    else:
+        channel = discord.utils.get(guild.text_channels, name=channel_given)
+    role_locked = discord.utils.get(guild.roles, name="Membre")
+
+    await channel.set_permissions(role_locked, send_messages=False)
+
+    """msg = 'This channel has been lockdown by Admins. You cannot write until further ado'
+    await channel.send(msg)"""
+
 
 
 @bot.command()
@@ -93,14 +107,8 @@ async def help(ctx, command=None):
         # Send embedded message
         await author.send(embed=embedded_message)
     else:
-        instruction = {
-            "help": 'Type "!help" to display the available command.Type "!help [command]" to have more information',
-            "clear": 'Type "!clear [int]" to delete a /int\\ number of message',
-            "react": 'This command is in progress, please wait',
-            "role": 'Type "!role [role tag] [user tag]" to grant a user a specific role.'
-                    'You must have managing permission'
-        }
-        msg = instruction[command].split('.')
+
+        msg = fr.helper[command].split('?')
 
         # Create embedded message
         embedded_message.set_author(name='help : {0}'.format(command))
@@ -111,6 +119,7 @@ async def help(ctx, command=None):
         await author.send(embed=embedded_message)
 
 # End define bot command
+
 
 # Begin define bot event
 @bot.event
@@ -141,18 +150,20 @@ async def on_command_error(ctx, error):
     await author.send(msg)
 
 
-#Public Welcome
+# Public Welcome
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(735801671954858054) # channel bottesting
+    # channel bottesting
+    channel = bot.get_channel(735801671954858054)
     await member.send("Bienvenue dans le club régie !")
     await channel.send('**{0}** a rejoint le club régie !'.format(member.mention))
 
 
-#Mod Leave Announcement
+# Mod Leave Announcement
 @bot.event
 async def on_member_remove(member):
-    channel = bot.get_channel(735801671954858054) # channel bottesting
+    # channel bottesting
+    channel = bot.get_channel(735801671954858054)
     await channel.send('**' + member.mention + '** viens de quitter le serveur du club Régie.')
 
 
@@ -167,13 +178,14 @@ async def on_raw_reaction_add(p):
 async def on_raw_reaction_remove(p):
 
     guild = bot.get_guild(p.guild_id)
-    memeber = guild.get_member(p.user_id)
+    member = guild.get_member(p.user_id)
 
     if p.message_id == 738179495118241798:
         msg = 'Why the fuck did you REMOVED IT ???'
-        await memeber.send(msg)
+        await member.send(msg)
+
 
 # End define bot event
 
 # Start bot
-bot.run(TOKEN)
+bot.run(fr.TOKEN)
