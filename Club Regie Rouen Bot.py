@@ -100,10 +100,10 @@ async def help(ctx, command=None):
 
         # Create embedded message
         embedded_message.set_author(name='help : list of commands available')
-        embedded_message.add_field(name='clear', value='Delete message. Take a positive int as argument', inline=False)
+        """embedded_message.add_field(name='clear', value='Delete message. Take a positive int as argument', inline=False)
         embedded_message.add_field(name='react', value='Test to get a reaction. Take a emote as argument', inline=False)
-        embedded_message.add_field(name='role', value='Give the role "Bot Testing to the author', inline=False)
-
+        embedded_message.add_field(name='role', value='Give the role "Bot Testing to the author', inline=False)"""
+        embedded_message.add_field(name='WIP', value='Work In Progress, What did you expect ?', inline=False)
         # Send embedded message
         await author.send(embed=embedded_message)
     else:
