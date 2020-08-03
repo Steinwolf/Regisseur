@@ -33,6 +33,25 @@ async def clear(ctx, value):
 
 
 @bot.command()
+async def lockdown(ctx, channel_given=None):
+
+    guild = ctx.guild
+    if channel_given is None:
+        channel = ctx.channel
+    elif channel_given[0] == '<':
+        channel = discord.utils.get(guild.text_channels, mention=channel_given)
+    else:
+        channel = discord.utils.get(guild.text_channels, name=channel_given)
+    role_locked = discord.utils.get(guild.roles, name="Membre")
+
+    await channel.set_permissions(role_locked, send_messages=False)
+
+    """msg = 'This channel has been lockdown by Admins. You cannot write until further ado'
+    await channel.send(msg)"""
+
+
+
+@bot.command()
 async def react(ctx):
 
     channel = bot.get_channel(738175849592913980)
